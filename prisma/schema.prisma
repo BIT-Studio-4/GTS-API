@@ -12,3 +12,19 @@ datasource db {
   provider = "postgresql"
   url      = env("DATABASE_URL")
 }
+
+// 'model' represents any form of table-like instance that a database platform uses.
+// We use tables with PostgreSQL but databases that use MongoDB will use collections. 
+// Hence using generic syntaxing to fit either.
+model User {
+  // @id is the same thing as a PRIMARY KEY. It's how a record is distinguished within a table.
+  // @default(uuid()) is a Prisma specific function.
+  //     If this field is left blank when creating a record through Prisma it will automatically provide a UUID value.
+  //     E.g., '2c6eb26c-06ba-460a-b4fa-3f4e896ebdff'.
+  id                String                @id @unique @default(uuid())
+  name              String                @unique
+  password          String
+  money             Decimal
+
+  // More fields should be added when required, e.g., 'UserStats' or 'UserPerms'.
+}
