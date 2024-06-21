@@ -20,6 +20,12 @@ const createUser = async (req, res) => {
     user = await prisma.user.create({
       "data": { ...req.body },
     });
+
+    // Return the newly created user if all processes were successful.
+    return res.status(201).json({
+      "msg": `User ${req.body.name} successfully created!`,
+      "data": user
+    });
   } catch (error) {
     return res.status(500).json({ "msg": error.message });
   }
