@@ -16,6 +16,10 @@ const createUser = async (req, res) => {
     // Check that a user with the same unique info doesn't already exist.
     if (user) return res.status(403).json({ "msg": "User already exists." });
 
+    // Create a new user if all checks pass.
+    user = await prisma.user.create({
+      "data": { ...req.body },
+    });
   } catch (error) {
     return res.status(500).json({ "msg": error.message });
   }
