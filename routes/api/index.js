@@ -13,7 +13,7 @@ E.g., router.post("/", createUser);
 router.get("/", (req, res) => {
     res.send("Welcome to the GTS API!");
 });
-router.use("/user", userRoutes);
+router.use("/users", userRoutes);
 
 // This makes router the only output when imported elsewhere.
 export default router;
