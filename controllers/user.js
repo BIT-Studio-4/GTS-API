@@ -25,9 +25,11 @@ const updateUser = async (req, res) => {
       "data": { ...req.body },
     });
 
+    delete user.password;
+
     return res.status(200).json({
       "msg": `User '${user.name} successfully updated!`,
-      "data": user
+      "data": user,
     });
   } catch (error) {
     return res.status(500).json({ "msg": error.message });
@@ -35,5 +37,5 @@ const updateUser = async (req, res) => {
 };
 
 export {
-  updateUser
+  updateUser,
 };
