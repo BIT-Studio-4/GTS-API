@@ -25,6 +25,9 @@ const deleteUser = async (req, res) => {
       "where": { "name": String(user.name) },
     });
 
+    return res.status(200).json({
+      "msg": `User '${user.name}' successfully deleted!`,
+    });
   } catch (error) {
     return res.status(500).json({
       "msg": error.message,
