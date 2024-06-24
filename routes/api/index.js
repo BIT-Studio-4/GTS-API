@@ -1,5 +1,5 @@
 import express from "express";
-import userRoutes from "./user/index.js";
+import userRoutes from "./users/index.js";
 
 // router is used to connect extra routes to the API through a custom instance.
 const router = express.Router();
