@@ -14,7 +14,7 @@ const getUser = async (req, res) => {
     });
     const user = queryUser[0];
 
-    if (!user) return res.status(404).json({ "msg": `User ${req.params.id} not found.` });
+    if (!user) return res.status(404).json({ "msg": `User '${req.params.id}' not found.` });
 
     return res.status(200).json({
       "data": user,
