@@ -11,6 +11,11 @@ const getUser = async (req, res) => {
           { "name": { "equals": String(req.params.id) }},
         ],
       },
+      "select": {
+        "id": true,
+        "money": true,
+        "name": true,
+      },
     });
     const user = queryUser[0];
 
