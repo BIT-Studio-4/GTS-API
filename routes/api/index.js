@@ -13,6 +13,11 @@ E.g., router.post("/", createUser);
 router.get("/", (req, res) => {
     res.send("Welcome to the GTS API!");
 });
+router.use("/users", userRoutes);
+
+router.use("/users", userRoutes);
+
+router.use("/users", userRoutes);
 
 router.use("/users", userRoutes);
 
