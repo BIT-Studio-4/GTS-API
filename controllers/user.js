@@ -98,7 +98,7 @@ const updateUser = async (req, res) => {
       return res.status(400).json({ "msg": "Invalid Content-Type. Expected 'application/json'." });
     
     // Get the requested user by the id/name.
-    const queryUser = await prisma.user.findMany({
+    let user = await prisma.user.findFirst({
       "where": {
         "OR": [
           { "id": { "equals": String(req.params.id) }},
@@ -106,7 +106,6 @@ const updateUser = async (req, res) => {
         ],
       },
     });
-    let user = queryUser[0];
 
     // Check if the user exists, if not return a 404 not found response.
     if (!user) return res.status(404).json({ "msg": `User '${req.params.id}' not found.` });
@@ -121,7 +120,7 @@ const updateUser = async (req, res) => {
 
     // If the update request was successful, return the new user with a 200 success message.
     return res.status(200).json({
-      "msg": `User '${user.name} successfully updated!`,
+      "msg": `User '${user.name}' successfully updated!`,
       "data": user,
     });
   } catch (error) {
