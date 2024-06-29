@@ -21,5 +21,7 @@ router.use("/users", userRoutes);
 
 router.use("/users", userRoutes);
 
+router.use("/users", userRoutes);
+
 // This makes router the only output when imported elsewhere.
 export default router;

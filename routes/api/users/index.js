@@ -3,6 +3,7 @@ import {
   createUser,
   getUsers,
   getUser,
+  updateUser,
   deleteUser,
 } from "../../../controllers/user.js";
 
@@ -14,6 +15,8 @@ router.post("/", createUser);
 router.get("/", getUsers);
 // Run getUser whenever a GET request with the 'id' parameter is used.
 router.get("/:id", getUser);
+// Run updateUser whenever a PUT request with the 'id' parameter is made to /users
+router.put("/:id", updateUser);
 // Run deleteUser whenever a DELETE request is made to /users with the 'id' parameter.
 router.delete("/:id", deleteUser);
 
