@@ -16,7 +16,7 @@ const register = async (req, res) => {
       "where": { "name": String(req.body.name) },
     });
 
-    if (user) return res.status(409).json({ "msg": "User already exists." });
+    if (user) return res.status(409).json({ "msg": `User ${req.body.name} already exists.` });
 
     // Encrypt the user's password with a salt and a hash
     // The salt means that the hash is always different even if the password is the same as another user
