@@ -11,7 +11,7 @@ const register = async (req, res) => {
     if (!contentType || contentType !== "application/json")
       return res.status(400).json({ "msg": "Invalid Content-Type. Expected 'application/json'." });
 
-    const user = await prisma.user.findUnique({
+    let user = await prisma.user.findUnique({
       "where": { "name": String(req.body.name) },
     });
 
@@ -20,6 +20,11 @@ const register = async (req, res) => {
     const salt = await bcryptjs.genSalt();
     const hashedPassword = await bcryptjs.hash(req.body.password, salt);
     req.body.password = hashedPassword;
+
+    user = await prisma.user.create({
+      "data": { ...req.body },
+    });
+    delete user.password;
   } catch (error) {
     return res.status(500).json({ "msg": error.message });
   }
