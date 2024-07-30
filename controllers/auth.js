@@ -60,6 +60,11 @@ const login = async (req, res) => {
     // Since the password in the db is encrypted, it needs to compare it to the hashed password and check if the passwords are the same
     const isPasswordCorrect = await bcryptjs.compare(req.body.password, user.password);
     if (!isPasswordCorrect) return res.status(401).json({ "msg": "Invalid username or password." });
+
+    const token = jwt.sign({
+      "id": user.id,
+      "name": user.name,
+    }, process.env.JWT_SECRET, { "expiresIn": process.env.JWT_LIFETIME });
   } catch (error) {
     
   }
