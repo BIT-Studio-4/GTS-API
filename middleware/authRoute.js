@@ -11,10 +11,18 @@ const authRoute = (req, res, next) => {
     const token = authHeader.split(" ")[1];
     const payload = jwt.verify(token, process.env.JWT_SECRET);
 
-    req.user = payload; // Save the received user payload from the token to the request
+    // Save the received user payload from the token to the request
+    // E.g., 
+    // {
+    //    "id": "...",
+    //    "name": "...",
+    // }
+    req.user = payload; 
 
+    // If all checks passed and the payload was saved, allow the request to continue
     return next();
   } catch (error) {
+    // Return an invalid access error if an error occured during the validation process
     return res.status(403).json({ "msg": "Not authorized to access this route." });
   }
 };
