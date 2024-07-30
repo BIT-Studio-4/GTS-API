@@ -11,21 +11,26 @@ const register = async (req, res) => {
     if (!contentType || contentType !== "application/json")
       return res.status(400).json({ "msg": "Invalid Content-Type. Expected 'application/json'." });
 
+    // Check if a user with the same name already exists
     let user = await prisma.user.findUnique({
       "where": { "name": String(req.body.name) },
     });
 
     if (user) return res.status(409).json({ "msg": "User already exists." });
 
+    // Encrypt the user's password with a salt and a hash
+    // The salt means that the hash is always different even if the password is the same as another user
     const salt = await bcryptjs.genSalt();
     const hashedPassword = await bcryptjs.hash(req.body.password, salt);
     req.body.password = hashedPassword;
 
+    // If all checks pass, create new user with newly hashed password
     user = await prisma.user.create({
       "data": { ...req.body },
     });
     delete user.password;
 
+    // Return the user without password if user creation was successful
     return res.status(201).json({
       "msg": `User ${user.name} successfully created!`,
       "data": user,
