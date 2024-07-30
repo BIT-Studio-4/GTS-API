@@ -36,6 +36,7 @@ const register = async (req, res) => {
       "data": user,
     });
   } catch (error) {
+    // If an error occurs during the register process, return with a 500 status code and the error message generated.
     return res.status(500).json({ 
       "msg": error.message,
     });
@@ -63,6 +64,7 @@ const login = async (req, res) => {
 
     delete user.password;
 
+    // If all checks pass, generate new token with the user's name and id
     const token = jwt.sign({
       "id": user.id,
       "name": user.name,
@@ -70,11 +72,13 @@ const login = async (req, res) => {
 
     user.token = token;
 
+    // If token generation was successfully, return the user with the new token
     return res.status(200).json({
       "msg": `User ${user.name} successfully logged in!`,
       "data": user,
     });
   } catch (error) {
+    // If an error occurs during the login process, return with a 500 status code and the error message generated.
     return res.status(500).json({ 
       "msg": error.message,
     });
