@@ -48,6 +48,13 @@ const login = async (req, res) => {
     const contentType = req.headers["content-type"];
     if (!contentType || contentType !== "application/json")
       return res.status(400).json({ "msg": "Invalid Content-Type. Expected 'application/json'." });
+
+    // Check if the requested user exists before attempting to login
+    let user = await prisma.user.findUnique({
+      "where": { "name": String(req.body.name) },
+    });
+
+    if (!user) return res.status(409).json({ "msg": "Invalid username or password." });
   } catch (error) {
     
   }
