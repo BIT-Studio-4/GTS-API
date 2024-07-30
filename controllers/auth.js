@@ -55,6 +55,11 @@ const login = async (req, res) => {
     });
 
     if (!user) return res.status(401).json({ "msg": "Invalid username or password." });
+
+    // Check if the supplied password matches the request user's password
+    // Since the password in the db is encrypted, it needs to compare it to the hashed password and check if the passwords are the same
+    const isPasswordCorrect = await bcryptjs.compare(req.body.password, user.password);
+    if (!isPasswordCorrect) return res.status(401).json({ "msg": "Invalid username or password." });
   } catch (error) {
     
   }
