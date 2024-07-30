@@ -43,7 +43,14 @@ const register = async (req, res) => {
 };
 
 const login = async (req, res) => {
-
+  try {
+    // Check if the request is formatted correctly
+    const contentType = req.headers["content-type"];
+    if (!contentType || contentType !== "application/json")
+      return res.status(400).json({ "msg": "Invalid Content-Type. Expected 'application/json'." });
+  } catch (error) {
+    
+  }
 };
 
 export {
