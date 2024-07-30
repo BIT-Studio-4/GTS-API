@@ -54,7 +54,7 @@ const login = async (req, res) => {
       "where": { "name": String(req.body.name) },
     });
 
-    if (!user) return res.status(409).json({ "msg": "Invalid username or password." });
+    if (!user) return res.status(401).json({ "msg": "Invalid username or password." });
   } catch (error) {
     
   }
