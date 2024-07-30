@@ -61,10 +61,19 @@ const login = async (req, res) => {
     const isPasswordCorrect = await bcryptjs.compare(req.body.password, user.password);
     if (!isPasswordCorrect) return res.status(401).json({ "msg": "Invalid username or password." });
 
+    delete user.password;
+
     const token = jwt.sign({
       "id": user.id,
       "name": user.name,
     }, process.env.JWT_SECRET, { "expiresIn": process.env.JWT_LIFETIME });
+
+    user.token = token;
+
+    return res.status(200).json({
+      "msg": `User ${user.name} successfully logged in!`,
+      "data": user,
+    });
   } catch (error) {
     
   }
