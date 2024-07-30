@@ -17,6 +17,9 @@ const register = async (req, res) => {
 
     if (user) return res.status(409).json({ "msg": "User already exists." });
 
+    const salt = await bcryptjs.genSalt();
+    const hashedPassword = await bcryptjs.hash(req.body.password, salt);
+    req.body.password = hashedPassword;
   } catch (error) {
     return res.status(500).json({ "msg": error.message });
   }
