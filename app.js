@@ -1,6 +1,8 @@
 import express, { json, urlencoded } from "express";
 import cors from "cors";
 import cookieParser from "cookie-parser";
+import authMiddleware from "./middleware/authRoute.js";
+import authRoutes from "./routes/auth/index.js";
 import apiRoutes from "./routes/api/index.js";
 
 const setXContentTypeOptions = (req, res, next) => {
@@ -32,7 +34,8 @@ app.get("/", (req, res) => {
     res.send("Welcome to the GTS homepage!");
 });
 
-app.use("/api", apiRoutes);
+app.use("/auth", authRoutes);
+app.use("/api", authMiddleware, apiRoutes);
 
 // Starts the API on port 3000. E.g., http://localhost:3000.
 app.listen(3000, () => {
