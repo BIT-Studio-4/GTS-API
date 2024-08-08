@@ -92,6 +92,10 @@ const getUser = async (req, res) => {
 
 const updateUser = async (req, res) => {
   try {
+    // Check if the request is being made by a valid user.
+    if (!(req.user.id === req.params.id || req.user.name === req.params.id))
+      return res.status(403).json({ "msg": "Not authorized to make this request." });
+
     // Check if the request is using the correct format for the API to parse.
     const contentType = req.headers["content-type"];
     if (!contentType || contentType !== "application/json")
@@ -130,6 +134,10 @@ const updateUser = async (req, res) => {
 
 const deleteUser = async (req, res) => {
   try {
+    // Check if the request is being made by a valid user.
+    if (!(req.user.id === req.params.id || req.user.name === req.params.id))
+      return res.status(403).json({ "msg": "Not authorized to make this request." });
+    
     // Get the requested user.
     const queryUser = await prisma.user.findMany({
       // Search for a user with either an id or name that matches the id parameter.
