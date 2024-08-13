@@ -67,7 +67,6 @@ const login = async (req, res) => {
     // If all checks pass, generate new token with the user's name and id
     const token = jwt.sign({
       "id": user.id,
-      "name": user.name,
     }, process.env.JWT_SECRET, { "expiresIn": process.env.JWT_LIFETIME });
 
     user.token = token;
