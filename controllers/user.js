@@ -130,20 +130,13 @@ const updateUser = async (req, res) => {
 const deleteUser = async (req, res) => {
   try {
     // Check if the request is being made by a valid user.
-    if (!(req.user.id === req.params.id || req.user.name === req.params.id))
+    if (!(req.user.id === req.params.id))
       return res.status(403).json({ "msg": "Not authorized to make this request." });
     
     // Get the requested user.
-    const queryUser = await prisma.user.findMany({
-      // Search for a user with either an id or name that matches the id parameter.
-      "where": {
-        "OR": [
-          { "id": { "equals": String(req.params.id) }},
-          { "name": { "equals": String(req.params.id) }},
-        ],
-      },
+    const user = await prisma.user.findUnique({
+      "where": { "id": String(req.params.id) },
     });
-    const user = queryUser[0];
 
     // Check if the requested user exists, if not return a 404 not found response.
     if (!user) return res.status(404).json({ "msg": `User '${req.params.id}' not found.` });
