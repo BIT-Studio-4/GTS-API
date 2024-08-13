@@ -59,14 +59,9 @@ const getUsers = async (req, res) => {
 
 const getUser = async (req, res) => {
   try {
-    const queryUser = await prisma.user.findMany({
-      // Search for a user with either an id or name that matches the id parameter.
-      "where": {
-        "OR": [
-          { "id": { "equals": String(req.params.id) }},
-          { "name": { "equals": String(req.params.id) }},
-        ],
-      },
+    const user = await prisma.user.findUnique({
+      // Search for a user that matches the id parameter.
+      "where": { "id": String(req.params.id) },
       // Only requests information that isn't confidential or dangerous.
       "select": {
         "id": true,
@@ -74,7 +69,6 @@ const getUser = async (req, res) => {
         "name": true,
       },
     });
-    const user = queryUser[0]; // Since findMany returns a list, take the first result. This should always work since the id and name fields require unique entries.
 
     // If the user doesn't exist, return a 404 not found response.
     if (!user) return res.status(404).json({ "msg": `User '${req.params.id}' not found.` });
