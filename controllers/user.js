@@ -93,7 +93,7 @@ const getUser = async (req, res) => {
 const updateUser = async (req, res) => {
   try {
     // Check if the request is being made by a valid user.
-    if (!(req.user.id === req.params.id || req.user.name === req.params.id))
+    if (!(req.user.id === req.params.id))
       return res.status(403).json({ "msg": "Not authorized to make this request." });
 
     // Check if the request is using the correct format for the API to parse.
@@ -101,14 +101,9 @@ const updateUser = async (req, res) => {
     if (!contentType || contentType !== "application/json")
       return res.status(400).json({ "msg": "Invalid Content-Type. Expected 'application/json'." });
     
-    // Get the requested user by the id/name.
-    let user = await prisma.user.findFirst({
-      "where": {
-        "OR": [
-          { "id": { "equals": String(req.params.id) }},
-          { "name": { "equals": String(req.params.id) }},
-        ],
-      },
+    // Get the requested user by the id.
+    let user = await prisma.user.findUnique({
+      "where": { "id": String(req.params.id) },
     });
 
     // Check if the user exists, if not return a 404 not found response.
@@ -116,7 +111,7 @@ const updateUser = async (req, res) => {
 
     // Update the user with the provided information.
     user = await prisma.user.update({
-      "where": { "name": String(user.name) },
+      "where": { "id": String(user.id) },
       "data": { ...req.body },
     });
 
