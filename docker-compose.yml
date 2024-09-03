@@ -10,12 +10,16 @@ services:
       PGDATA: ${PGDATA}
     volumes:
       - GTS-DB:/var/lib/postgresql/data
+    ports: 
+      - 5432:5432
 
   api:
     restart: always
     image: gts
     environment:
       DATABASE_URL: ${DATABASE_URL}
+      JWT_SECRET: ${JWT_SECRET}
+      JWT_LIFETIME: ${JWT_LIFETIME}
     ports:
       - 80:3000
 

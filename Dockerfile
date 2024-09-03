@@ -21,3 +21,4 @@ CMD ["node", "app.js"]
 
 # run prisma
 RUN npx prisma generate
+RUN npx prisma migrate deploy
