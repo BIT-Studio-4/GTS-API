@@ -1,0 +1,29 @@
+services:
+  db:
+    image: postgres
+    restart: always
+    # set shared memory limit when using docker-compose
+    environment:
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD}
+      POSTGRES_USER: ${POSTGRES_USER}
+      POSTGRES_DB: ${POSTGRES_DB}
+      PGDATA: ${PGDATA}
+    volumes:
+      - GTS-DB:/var/lib/postgresql/data
+    ports: 
+      - 5432:5432
+
+  api:
+    restart: always
+    image: gts
+    environment:
+      DATABASE_URL: ${DATABASE_URL}
+      JWT_SECRET: ${JWT_SECRET}
+      JWT_LIFETIME: ${JWT_LIFETIME}
+    ports:
+      - 80:3000
+
+
+volumes:
+  GTS-DB:
+    external: true

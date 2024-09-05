@@ -5,6 +5,8 @@ import authMiddleware from "./middleware/authRoute.js";
 import authRoutes from "./routes/auth/index.js";
 import apiRoutes from "./routes/api/index.js";
 
+const PORT = process.env.PORT || 3000;
+
 const setXContentTypeOptions = (req, res, next) => {
     res.set("x-content-type-options", "nosniff");
     next();
@@ -37,9 +39,9 @@ app.get("/", (req, res) => {
 app.use("/auth", authRoutes);
 app.use("/api", authMiddleware, apiRoutes);
 
-// Starts the API on port 3000. E.g., http://localhost:3000.
-app.listen(3000, () => {
-    console.log("Server is listening on port 3000.");
+// Starts the API on port number. E.g., http://localhost:3000.
+app.listen(PORT, () => {
+    console.log("Server is listening on port " + PORT);
 });
 
 export default app;
