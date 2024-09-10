@@ -20,17 +20,13 @@ const users = [
 ];
 
 const seedUsers = async () => {
-  for (let user in users) {
+  for (const user of users) {
     await prisma.user.upsert({
-      where: {
-        name: user.name,
-      },
-      update: {
-        ...user,
-      },
-      create: {
-        ...user,
-      },
+        where: {
+          name: user.name,
+        },
+        update: user,
+        create: user,
     });
   }
 };
