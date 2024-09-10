@@ -19,8 +19,7 @@ const users = [
     },
 ];
 
-const main = async () => {
-  try {
+const seedUsers = async () => {
     for (let user in users) {
         await prisma.user.upsert({
             where: {
@@ -34,6 +33,11 @@ const main = async () => {
             },
         });
     }
+};
+
+const main = async () => {
+  try {
+    await seedUsers();
   } catch (err) {
     console.error(err);
   } finally {
