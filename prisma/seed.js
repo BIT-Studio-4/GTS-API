@@ -61,4 +61,5 @@ const main = async () => {
   }
 };
 
+// Runs immediately upon being called, e.g., as a script
 main();
