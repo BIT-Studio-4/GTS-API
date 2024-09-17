@@ -1,3 +1,8 @@
+/**
+ * @file Automatic testing for the User controllers and routes using Mocha and Chai.
+ * @author GTS
+ */
+
 import chai from "chai";
 import chaiHttp from "chai-http";
 import { describe, it } from "mocha";
@@ -8,7 +13,10 @@ chai.use(chaiHttp);
 
 let token;
 
+// Initiates Mocha testing for 'Users'
 describe("Users", () => {
+  // Runs a test using Chai on a given endpoint.
+  // E.g., calling '/auth/register' with the proper data provided should create a new user and respond with a correct success message.
   it("should register new user", (done) => {
     chai
       .request(app)
@@ -47,7 +55,7 @@ describe("Users", () => {
     chai
       .request(app)
       .post("/api/users")
-      .set({ "Authorization": `Bearer ${token}` })
+      .set({ "Authorization": `Bearer ${token}` }) // Sets the auth header required to make requests to the /api routes
       .send({
         name: 34, //name should be a string (changed to num)
         password: "DavePassword!",
