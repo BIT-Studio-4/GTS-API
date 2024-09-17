@@ -9,6 +9,21 @@ chai.use(chaiHttp);
 let token;
 
 describe("Users", () => {
+  it("should register new user", (done) => {
+    chai
+      .request(app)
+      .post("/auth/register")
+      .send({
+        name: "Jester", //name should be a string (changed to num)
+        password: "RoyaltyNo1!",
+        money: -10
+      })
+      .end((req, res) => {
+        console.log(res.body); // This is useful for debugging. Make sure you remove it before you commit your code
+        chai.expect(res.body.msg).to.be.equal(`User ${res.body.data.name} successfully created!`);
+        done();
+      });
+  });
 
   it("should not create user", (done) => {
     chai
