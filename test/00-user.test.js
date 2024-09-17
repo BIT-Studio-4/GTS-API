@@ -25,6 +25,24 @@ describe("Users", () => {
       });
   });
 
+  it("should login user", (done) => {
+    chai
+      .request(app)
+      .post("/auth/login")
+      .send({
+        name: "dave", //name should be a string (changed to num)
+        password: "DavePassword!"
+      })
+      .end((req, res) => {
+        console.log(res.body); // This is useful for debugging. Make sure you remove it before you commit your code
+        chai.expect(res.body.msg).to.be.equal(`User ${res.body.data.name} successfully logged in!`);
+
+        if (res.body.data.token) token = res.body.data.token;
+
+        done();
+      });
+  });
+
   it("should not create user", (done) => {
     chai
       .request(app)
