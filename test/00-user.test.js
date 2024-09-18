@@ -23,12 +23,11 @@ describe("Users", () => {
       .request(app)
       .post("/auth/register")
       .send({
-        name: "Jester", //name should be a string (changed to num)
+        name: "Jester",
         password: "RoyaltyNo1!",
         money: -10
       })
       .end((req, res) => {
-        console.log(res.body); // This is useful for debugging. Make sure you remove it before you commit your code
         chai.expect(res.body.msg).to.be.equal(`User ${res.body.data.name} successfully created!`);
         done();
       });
@@ -39,11 +38,10 @@ describe("Users", () => {
       .request(app)
       .post("/auth/login")
       .send({
-        name: "dave", //name should be a string (changed to num)
+        name: "dave",
         password: "DavePassword!"
       })
       .end((req, res) => {
-        console.log(res.body); // This is useful for debugging. Make sure you remove it before you commit your code
         chai.expect(res.body.msg).to.be.equal(`User ${res.body.data.name} successfully logged in!`);
 
         if (res.body.data.token) token = res.body.data.token;
@@ -64,7 +62,6 @@ describe("Users", () => {
         money: 20
       })
       .end((req, res) => {
-        console.log(res.body); // This is useful for debugging. Make sure you remove it before you commit your code
         chai.expect(res.body.msg).to.be.equal("Argument `name`: Invalid value provided. Expected String, provided Int.");
         done();
       });
@@ -81,7 +78,6 @@ describe("Users", () => {
         money: 20
       })
       .end((req, res) => {
-        console.log(res.body); // This is useful for debugging. Make sure you remove it before you commit your code
         chai.expect(res.body.msg).to.be.equal(`User ${res.body.data.name} successfully created!`);
         done();
       });
@@ -93,7 +89,6 @@ describe("Users", () => {
       .get("/api/users")
       .set({ "Authorization": `Bearer ${token}` })
       .end((req, res) => {
-        console.log(res.body); // This is useful for debugging. Make sure you remove it before you commit your code
         chai.expect(res.status).to.be.equal(200);
         chai.expect(res.body).to.be.a("object");
         chai.expect(res.body.data).to.be.a("array");
@@ -107,7 +102,6 @@ describe("Users", () => {
       .get(`/api/users/${userId}`)
       .set({ "Authorization": `Bearer ${token}` })
       .end((req, res) => {
-        console.log(res.body); // This is useful for debugging. Make sure you remove it before you commit your code
         chai.expect(res.status).to.be.equal(200);
         chai.expect(res.body).to.be.a("object");
         chai.expect(res.body.data.name).to.be.equal("dave");
@@ -126,7 +120,6 @@ describe("Users", () => {
         money: 2500
       })
       .end((req, res) => {
-        console.log(res.body); // This is useful for debugging. Make sure you remove it before you commit your code
         chai.expect(res.status).to.be.equal(200);
         chai.expect(res.body).to.be.a("object");
         chai.expect(res.body.data.name).to.be.equal("hannah");
@@ -141,7 +134,6 @@ describe("Users", () => {
       .delete(`/api/users/${userId}`)
       .set({ "Authorization": `Bearer ${token}` })
       .end((req, res) => {
-        console.log(res.body); // This is useful for debugging. Make sure you remove it before you commit your code
         chai.expect(res.status).to.be.equal(200);
         done();
       });
