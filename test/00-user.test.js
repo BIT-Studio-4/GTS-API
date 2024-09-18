@@ -47,6 +47,7 @@ describe("Users", () => {
         chai.expect(res.body.msg).to.be.equal(`User ${res.body.data.name} successfully logged in!`);
 
         if (res.body.data.token) token = res.body.data.token;
+        if (res.body.data.id) userId = res.body.data.id;
 
         done();
       });
@@ -82,9 +83,6 @@ describe("Users", () => {
       .end((req, res) => {
         console.log(res.body); // This is useful for debugging. Make sure you remove it before you commit your code
         chai.expect(res.body.msg).to.be.equal(`User ${res.body.data.name} successfully created!`);
-
-        if (res.body.data.id) userId = res.body.data.id;
-
         done();
       });
   });
@@ -112,7 +110,27 @@ describe("Users", () => {
         console.log(res.body); // This is useful for debugging. Make sure you remove it before you commit your code
         chai.expect(res.status).to.be.equal(200);
         chai.expect(res.body).to.be.a("object");
-        chai.expect(res.body.data.name).to.be.equal("Bryan");
+        chai.expect(res.body.data.name).to.be.equal("dave");
+        done();
+      });
+  });
+
+  it("should update user", (done) => {
+    chai
+      .request(app)
+      .put(`/api/users/${userId}`)
+      .set({ "Authorization": `Bearer ${token}` })
+      .send({
+        name: "hannah",
+        password: "HannahNeedsNoPassword.",
+        money: 2500
+      })
+      .end((req, res) => {
+        console.log(res.body); // This is useful for debugging. Make sure you remove it before you commit your code
+        chai.expect(res.status).to.be.equal(200);
+        chai.expect(res.body).to.be.a("object");
+        chai.expect(res.body.data.name).to.be.equal("hannah");
+        chai.expect(res.body.msg).to.be.equal(`User '${res.body.data.name}' successfully updated!`)
         done();
       });
   });
