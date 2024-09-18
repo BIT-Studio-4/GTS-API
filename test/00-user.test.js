@@ -12,6 +12,7 @@ import app from "../app.js";
 chai.use(chaiHttp);
 
 let token;
+let userId;
 
 // Initiates Mocha testing for 'Users'
 describe("Users", () => {
@@ -81,6 +82,9 @@ describe("Users", () => {
       .end((req, res) => {
         console.log(res.body); // This is useful for debugging. Make sure you remove it before you commit your code
         chai.expect(res.body.msg).to.be.equal(`User ${res.body.data.name} successfully created!`);
+
+        if (res.body.data.id) userId = res.body.data.id;
+
         done();
       });
   });
@@ -95,6 +99,20 @@ describe("Users", () => {
         chai.expect(res.status).to.be.equal(200);
         chai.expect(res.body).to.be.a("object");
         chai.expect(res.body.data).to.be.a("array");
+        done();
+      });
+  });
+
+  it("should read user", (done) => {
+    chai
+      .request(app)
+      .get(`/api/users/${userId}`)
+      .set({ "Authorization": `Bearer ${token}` })
+      .end((req, res) => {
+        console.log(res.body); // This is useful for debugging. Make sure you remove it before you commit your code
+        chai.expect(res.status).to.be.equal(200);
+        chai.expect(res.body).to.be.a("object");
+        chai.expect(res.body.data.name).to.be.equal("Bryan");
         done();
       });
   });
