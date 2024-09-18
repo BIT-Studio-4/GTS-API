@@ -85,4 +85,18 @@ describe("Users", () => {
       });
   });
 
+  it("should read all users", (done) => {
+    chai
+      .request(app)
+      .get("/api/users")
+      .set({ "Authorization": `Bearer ${token}` })
+      .end((req, res) => {
+        console.log(res.body); // This is useful for debugging. Make sure you remove it before you commit your code
+        chai.expect(res.status).to.be.equal(200);
+        chai.expect(res.body).to.be.a("object");
+        chai.expect(res.body.data).to.be.a("array");
+        done();
+      });
+  });
+  
 });
