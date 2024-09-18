@@ -134,5 +134,17 @@ describe("Users", () => {
         done();
       });
   });
+
+  it("should delete user", (done) => {
+    chai
+      .request(app)
+      .delete(`/api/users/${userId}`)
+      .set({ "Authorization": `Bearer ${token}` })
+      .end((req, res) => {
+        console.log(res.body); // This is useful for debugging. Make sure you remove it before you commit your code
+        chai.expect(res.status).to.be.equal(200);
+        done();
+      });
+  });
   
 });
