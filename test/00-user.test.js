@@ -3,6 +3,7 @@
  * @author GTS
  */
 
+import bcryptjs from "bcryptjs";
 import chai from "chai";
 import chaiHttp from "chai-http";
 import { describe, it } from "mocha";
@@ -68,14 +69,22 @@ describe("Users", () => {
   });
 
   it("should create user", (done) => {
+    let userData = {
+      name: "Bryan",
+      password: "BryanPassword!",
+      money: 20
+    };
+
+    const salt = bcryptjs.genSaltSync();
+    const hashedPassword = bcryptjs.hashSync(userData.password, salt);
+    userData.password = hashedPassword;
+
     chai
       .request(app)
       .post("/api/users")
       .set({ "Authorization": `Bearer ${token}` })
       .send({
-        name: "Bryan",
-        password: "BryanPassword!",
-        money: 20
+        ...userData,
       })
       .end((req, res) => {
         chai.expect(res.body.msg).to.be.equal(`User ${res.body.data.name} successfully created!`);
