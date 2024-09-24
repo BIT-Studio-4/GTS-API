@@ -63,7 +63,7 @@ describe("Users", () => {
         money: 20
       })
       .end((req, res) => {
-        chai.expect(res.body.msg).to.be.equal("Argument `name`: Invalid value provided. Expected String, provided Int.");
+        chai.expect(res.body.msg).to.be.equal("Name should be a string.");
         done();
       });
   });
