@@ -1,4 +1,4 @@
-import { authSchema, userSchema } from "./validationSchemas.js";
+import { authSchema, createUserSchema, updateUserSchema } from "./validationSchemas.js";
 
 const validateAuth = (req, res, next) => {
   const { error } = authSchema.validate(req.body);
@@ -11,8 +11,19 @@ const validateAuth = (req, res, next) => {
   next();
 };
 
-const validateMutateUser = (req, res, next) => {
-  const { error } = userSchema.validate(req.body);
+const validateCreateUser = (req, res, next) => {
+  const { error } = createUserSchema.validate(req.body);
+
+  if (error)
+    return res.status(400).json({
+      "msg": error.details[0].message,
+    });
+
+  next();
+};
+
+const validateUpdateUser = (req, res, next) => {
+  const { error } = updateUserSchema.validate(req.body);
 
   if (error)
     return res.status(400).json({
@@ -24,5 +35,6 @@ const validateMutateUser = (req, res, next) => {
 
 export {
   validateAuth,
-  validateMutateUser,
+  validateCreateUser,
+  validateUpdateUser,
 };
