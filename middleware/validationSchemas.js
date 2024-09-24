@@ -57,6 +57,12 @@ export const updateUserSchema = Joi.object({
     "string.max": "Name should have a maximum length of {#limit}.",
     "any.required": "Name is required.",
   }),
+  password: Joi.string().min(8).max(128).messages({
+    "string.base": "Password should be a string.",
+    "string.empty": "Password cannot be empty.",
+    "string.min": "Password should have a minimum length of {#limit}.",
+    "string.max": "Password should have a maximum length of {#limit}.",
+  }),
   money: Joi.number().required().messages({
     "number.base": "Money must be a number.",
     "number.unsafe": "Money is outside of usable range of numbers.",
