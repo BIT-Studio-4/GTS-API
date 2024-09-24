@@ -5,7 +5,7 @@
 
 import Joi from "joi";
 
-const nameRegex = /[A-Za-z]+[0-9]+!@#\$%\^&\*\(\)_-\?/;
+const nameRegex = /^[A-Za-z0-9_!@#\$%\^&\*\(\)\-\?]+$/;
 
 export const authSchema = Joi.object({
   name: Joi.string().min(1).max(25).regex(nameRegex).required().messages({
