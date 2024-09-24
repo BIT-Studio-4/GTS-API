@@ -1,4 +1,4 @@
-import { authSchema, userSchema } from "./validationSchemas";
+import { authSchema, userSchema } from "./validationSchemas.js";
 
 const validateAuth = (req, res, next) => {
   const { error } = authSchema.validate(req.body);
