@@ -78,4 +78,40 @@ const getItem = async (req, res) => {
   }
 };
 
-export { createItem, getItems, getItem };
+const updateItem = async (req, res) => {
+  try {
+    const contentType = req.headers["content-type"];
+    if (!contentType || contentType !== "application/json")
+      return res.status(400).json({
+        "msg": "Invalid Content-Type. Expected 'application/json'.",
+      });
+
+    let item = await prisma.item.findUnique({
+      "where": { "id": String(req.params.id) }
+    });
+
+    if (!item) return res.status(404).json({ "msg": `Item ${req.params.id} not found!` });
+
+    item = await prisma.item.update({
+      "where": { "id": String(req.params.id) },
+      "data": { ...req.body },
+      "select": {
+        "id": true,
+        "name": true,
+        "item_type": true,
+        "cost": true,
+      },
+    });
+
+    return res.status(200).json({
+      "msg": `Item ${item.id} successfully updated!`,
+      "data": item,
+    });
+  } catch (error) {
+    return res.status(500).json({
+      "msg": error.message,
+    });
+  }
+};
+
+export { createItem, getItems, getItem, updateItem };
