@@ -74,7 +74,6 @@ const validateUpdateItem = (req, res, next) => {
 };
 
 export {
-  validateAuth,
   validateCreateUser,
   validateUpdateUser,
   validateCreateItem,
