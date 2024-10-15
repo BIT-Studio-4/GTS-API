@@ -6,28 +6,28 @@ import bcryptjs from "bcryptjs";
 import { PrismaClient } from "@prisma/client";
 const prisma = new PrismaClient();
 
-const users = [
-  {
-    name: "dave",
-    password: "DavePassword!",
-    money: 20,
-  },
-  {
-    name: "jeffrey",
-    password: "BetterPassword24!",
-    money: 15,
-  },
-  {
-    name: "amanda",
-    password: "SuperDuperPassword98_",
-    money: 300,
-  },
-];
-
 /**
  * @description Seeds all of the required users with predetermined info.
  */
 const seedUsers = async () => {
+  const users = [
+    {
+      name: "dave",
+      password: "DavePassword!",
+      money: 20,
+    },
+    {
+      name: "jeffrey",
+      password: "BetterPassword24!",
+      money: 15,
+    },
+    {
+      name: "amanda",
+      password: "SuperDuperPassword98_",
+      money: 300,
+    },
+  ];
+
   for (const user of users) {
     // Hashes the user's password to ensure personal data security.
     const salt = await bcryptjs.genSalt();
@@ -52,6 +52,7 @@ const seedUsers = async () => {
 const main = async () => {
   try {
     await seedUsers();
+    await seedItems();
   } catch (err) {
     console.error(err);
   } finally {
