@@ -114,4 +114,26 @@ const updateItem = async (req, res) => {
   }
 };
 
-export { createItem, getItems, getItem, updateItem };
+const deleteItem = async (req, res) => {
+  try {
+    const item = await prisma.item.findUnique({
+      "where": { "id": String(req.params.id) }
+    });
+
+    if (!item) return res.status(404).json({ "msg": `Item ${req.params.id} not found!` });
+
+    await prisma.item.delete({
+      "where": { "id": String(req.params.id) }
+    });
+
+    return res.status(200).json({
+      "msg": `Item ${item.id} successfully deleted!`,
+    });
+  } catch (error) {
+    return res.status(500).json({
+      "msg": error.message,
+    });
+  }
+};
+
+export { createItem, getItems, getItem, updateItem, deleteItem };
