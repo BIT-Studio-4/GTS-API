@@ -68,7 +68,10 @@ model InventoryItem {
 model StoreObject {
   item_id           Int                   @unique
   store_id          String                @unique
-  quantity          Int
+  x_pos             Decimal
+  y_pos             Decimal
+  z_pos             Decimal
+  y_rot             Decimal
   item              Item                  @relation(fields: [item_id], references: [id], onDelete: Cascade, onUpdate: Cascade)
   store             Store                 @relation(fields: [store_id], references: [id], onDelete: Cascade, onUpdate: Cascade)
 }
