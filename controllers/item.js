@@ -1,4 +1,4 @@
-import { PrismaClient } from "@prisma/client/extension";
+import { PrismaClient } from "@prisma/client";
 
 const prisma = new PrismaClient();
 
@@ -57,7 +57,7 @@ const getItems = async (req, res) => {
 const getItem = async (req, res) => {
   try {
     const item = await prisma.item.findUnique({
-      "where": { "id": String(req.params.id) },
+      "where": { "id": Number(req.params.id) },
       "select": {
         "id": true,
         "name": true,
@@ -87,13 +87,13 @@ const updateItem = async (req, res) => {
       });
 
     let item = await prisma.item.findUnique({
-      "where": { "id": String(req.params.id) }
+      "where": { "id": Number(req.params.id) }
     });
 
     if (!item) return res.status(404).json({ "msg": `Item ${req.params.id} not found!` });
 
     item = await prisma.item.update({
-      "where": { "id": String(req.params.id) },
+      "where": { "id": Number(req.params.id) },
       "data": { ...req.body },
       "select": {
         "id": true,
@@ -117,13 +117,13 @@ const updateItem = async (req, res) => {
 const deleteItem = async (req, res) => {
   try {
     const item = await prisma.item.findUnique({
-      "where": { "id": String(req.params.id) }
+      "where": { "id": Number(req.params.id) }
     });
 
     if (!item) return res.status(404).json({ "msg": `Item ${req.params.id} not found!` });
 
     await prisma.item.delete({
-      "where": { "id": String(req.params.id) }
+      "where": { "id": Number(req.params.id) }
     });
 
     return res.status(200).json({
