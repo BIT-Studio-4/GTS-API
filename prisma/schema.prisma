@@ -52,7 +52,7 @@ model Inventory {
 model Item {
   id                Int                   @id @unique @default(autoincrement())
   name              String                @unique
-  object            ItemType
+  item_type         ItemType
   cost              Int
   inventory_items   InventoryItem[]
   store_objects     StoreObject[]
