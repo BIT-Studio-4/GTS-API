@@ -24,7 +24,56 @@ model User {
   id                String                @id @unique @default(uuid())
   name              String                @unique
   password          String
-  money             Decimal
+  save_game         SaveGame?
 
   // More fields should be added when required, e.g., 'UserStats' or 'UserPerms'.
+}
+
+model SaveGame {
+  id                String                @id @unique
+  money             Int
+  store             Store?
+  inventory         Inventory?
+  user              User                  @relation(fields: [id], references: [id], onDelete: Cascade, onUpdate: Cascade)
+}
+
+model Store {
+  id                String                @id @unique
+  store_objects     StoreObject[]
+  save_game         SaveGame              @relation(fields: [id], references: [id], onDelete: Cascade, onUpdate: Cascade)
+}
+
+model Inventory {
+  id                String                @id @unique
+  items             InventoryItem[]
+  save_game         SaveGame              @relation(fields: [id], references: [id], onDelete: Cascade, onUpdate: Cascade)
+}
+
+model Item {
+  id                Int                   @id @unique @default(autoincrement())
+  name              String                @unique
+  object            Object
+  inventory_items   InventoryItem[]
+  store_objects     StoreObject[]
+}
+
+model InventoryItem {
+  item_id           Int                   @unique
+  inventory_id      String                @unique
+  quantity          Int
+  item              Item                  @relation(fields: [item_id], references: [id], onDelete: Cascade, onUpdate: Cascade)
+  inventory         Inventory             @relation(fields: [inventory_id], references: [id], onDelete: Cascade, onUpdate: Cascade)
+}
+
+model StoreObject {
+  item_id           Int                   @unique
+  store_id          String                @unique
+  quantity          Int
+  item              Item                  @relation(fields: [item_id], references: [id], onDelete: Cascade, onUpdate: Cascade)
+  store             Store                 @relation(fields: [store_id], references: [id], onDelete: Cascade, onUpdate: Cascade)
+}
+
+enum Object {
+  STOCK
+  STRUCTURE
 }
