@@ -54,4 +54,28 @@ const getItems = async (req, res) => {
   }
 };
 
-export { createItem, getItems };
+const getItem = async (req, res) => {
+  try {
+    const item = await prisma.item.findUnique({
+      "where": { "id": String(req.params.id) },
+      "select": {
+        "id": true,
+        "name": true,
+        "item_type": true,
+        "cost": true,
+      },
+    });
+
+    if (!item) return res.status(404).json({ "msg": `Item ${req.params.id} not found!` });
+
+    return res.status(200).json({
+      "data": item,
+    });
+  } catch (error) {
+    return res.status(500).json({
+      "msg": error.message,
+    });
+  }
+};
+
+export { createItem, getItems, getItem };
