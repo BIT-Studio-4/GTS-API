@@ -31,4 +31,27 @@ const createItem = async (req, res) => {
   }
 };
 
-export { createItem };
+const getItems = async (req, res) => {
+  try {
+    const items = await prisma.item.findMany({
+      "select": {
+        "id": true,
+        "name": true,
+        "item_type": true,
+        "cost": true,
+      },
+    });
+
+    if (items.length === 0) return res.status(404).json({ "msg": "No items found!" });
+
+    return res.status(200).json({
+      "data": items,
+    });
+  } catch (error) {
+    return res.status(500).json({
+      "msg": error.message,
+    });
+  }
+};
+
+export { createItem, getItems };
