@@ -14,17 +14,14 @@ const seedUsers = async () => {
     {
       name: "dave",
       password: "DavePassword!",
-      money: 20,
     },
     {
       name: "jeffrey",
       password: "BetterPassword24!",
-      money: 15,
     },
     {
       name: "amanda",
       password: "SuperDuperPassword98_",
-      money: 300,
     },
   ];
 
@@ -37,11 +34,51 @@ const seedUsers = async () => {
     // Where a user exists, update it with the provided information, otherwise create one.
     // Safer than create, since if the user already exists it will replace the current info with the more relevant info.
     await prisma.user.upsert({
-        where: {
-          name: user.name,
-        },
-        update: user,
-        create: user,
+      where: {
+        name: user.name,
+      },
+      update: user,
+      create: user,
+    });
+  }
+};
+
+/**
+ * @description Seeds all of the required items with predetermined info.
+ */
+const seedItems = async () => {
+  const items = [
+    {
+      name: "Bottle",
+      item_type: "STOCK",
+      cost: 2
+    },
+    {
+      name: "Box",
+      item_type: "STOCK",
+      cost: 4
+    },
+    {
+      name: "Can",
+      item_type: "STOCK",
+      cost: 3
+    },
+    {
+      name: "Shelf",
+      item_type: "STRUCTURE",
+      cost: 50
+    },
+  ];
+
+  for (const item of items) {
+    // Where an item exists, update it with the provided information, otherwise create one.
+    // Safer than create, since if the item already exists it will replace the current info with the more relevant info.
+    await prisma.item.upsert({
+      where: {
+        name: item.name,
+      },
+      update: item,
+      create: item,
     });
   }
 };
