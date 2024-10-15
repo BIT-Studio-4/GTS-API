@@ -53,6 +53,7 @@ model Item {
   id                Int                   @id @unique @default(autoincrement())
   name              String                @unique
   object            Object
+  cost              Int
   inventory_items   InventoryItem[]
   store_objects     StoreObject[]
 }
