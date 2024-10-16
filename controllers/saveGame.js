@@ -14,10 +14,11 @@ const createSaveGame = async (req, res) => {
       "where": { "id": String(req.body.id) },
     });
 
-    if (saveGame) 
-      return res.status(403).json({
-        "msg": "Game save already exists!",
+    if (saveGame) {
+      await primsa.saveGame.delete({
+        "where": { "id": String(req.body.id) },
       });
+    }
     
     saveGame = await primsa.saveGame.create({
       "data": {
@@ -56,15 +57,30 @@ const createSaveGame = async (req, res) => {
 
     saveGame = await primsa.saveGame.findUnique({
       "where": { "id": String(req.body.id) },
-      "include": {
+      "select": {
+        "id": true,
+        "money": true,
         "store": {
-          "include": {
-            "store_objects": true
+          "select": {
+            "store_objects": {
+              "select": {
+                "item_id": true,
+                "x_pos": true,
+                "y_pos": true,
+                "z_pos": true,
+                "y_rot": true,
+              }
+            }
           },
         },
         "inventory": {
-          "include": {
-            "items": true
+          "select": {
+            "items": {
+              "select": {
+                "item_id": true,
+                "quantity": true,
+              },
+            },
           },
         },
       },
