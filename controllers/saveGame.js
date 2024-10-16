@@ -9,7 +9,12 @@ const createSaveGame = async (req, res) => {
       return res.status(400).json({
         "msg": "Invalid Content-Type. Expected 'application/json'."  
       });
-    
+
+    if (!req.body || req.user.id !== req.body.id)
+      return res.status(401).json({
+        "msg": "Not authorized to make this request.",
+      });
+
     let saveGame = await primsa.saveGame.findUnique({
       "where": { "id": String(req.body.id) },
     });
@@ -97,4 +102,87 @@ const createSaveGame = async (req, res) => {
   }
 };
 
-export { createSaveGame };
+const getSaveGame = async (req, res) => {
+  try {
+    if (!req.user || req.user.id !== req.params.id) 
+      return res.status(401).json({
+        "msg": "Not authorized to make this request.",
+      });
+    
+    const saveGame = await primsa.saveGame.findUnique({
+      "where": { "id": String(req.params.id) },
+      "select": {
+        "id": true,
+        "money": true,
+        "store": {
+          "select": {
+            "store_objects": {
+              "select": {
+                "item_id": true,
+                "x_pos": true,
+                "y_pos": true,
+                "z_pos": true,
+                "y_rot": true,
+              }
+            }
+          },
+        },
+        "inventory": {
+          "select": {
+            "items": {
+              "select": {
+                "item_id": true,
+                "quantity": true,
+              },
+            },
+          },
+        },
+      },
+    });
+
+    if (!saveGame) 
+      return res.status(404).json({
+        "msg": "Game save not found!",
+      });
+      
+    return res.status(200).json({
+      "data": saveGame,
+    });
+  } catch (error) {
+    return res.status(500).json({
+      "msg": error.message,
+    });
+  }
+};
+
+const deleteSaveGame = async (req, res) => {
+  try {
+    if (!req.user || req.user.id !== req.params.id) 
+      return res.status(401).json({
+        "msg": "Not authorized to make this request.",
+      });
+    
+    const saveGame = await primsa.saveGame.findUnique({
+      "where": { "id": String(req.params.id) },
+    });
+
+    if (!saveGame) 
+      return res.status(404).json({
+        "msg": "Game save not found!",
+      });
+
+    await primsa.saveGame.delete({
+      "where": { "id": String(req.params.id) }
+    })
+      
+    return res.status(200).json({
+      "msg": "Game save successfully deleted!",
+    });
+  } catch (error) {
+    return res.status(500).json({
+      "msg": error.message,
+    });
+  }
+};
+
+export { createSaveGame, getSaveGame, deleteSaveGame };
