@@ -42,6 +42,8 @@ export const updateUserSchema = Joi.object({
   }),
 });
 
+
+
 const itemRegex = /^[A-Za-z0-9_\(\)]+$/;
 const itemTypeRegex = /^[A-Z]+$/;
 
@@ -88,6 +90,8 @@ export const updateItemSchema = Joi.object({
     "any.required": "Cost is required.",
   }),
 });
+
+
 
 const storeObjectSchema = Joi.object({
   item_id: Joi.number().required().messages({
