@@ -1,6 +1,7 @@
 import express from "express";
 import userRoutes from "./users/index.js";
 import itemRoutes from "./items/index.js";
+import saveGameRoutes from "./saveGames/index.js";
 
 // router is used to connect extra routes to the API through a custom instance.
 const router = express.Router();
@@ -16,6 +17,7 @@ router.get("/", (req, res) => {
 });
 router.use("/users", userRoutes);
 router.use("/items", itemRoutes);
+router.use("/save_games", saveGameRoutes);
 
 
 // This makes router the only output when imported elsewhere.
