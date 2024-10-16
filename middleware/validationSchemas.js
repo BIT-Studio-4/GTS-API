@@ -159,9 +159,9 @@ export const createSaveGameSchema = Joi.object({
     "any.required": "Id is required.",
   }),
   money: Joi.number().required().messages({
-    "number.base": "Cost must be a number.",
-    "number.unsafe": "Cost is outside of the usable range of numbers.",
-    "any.required": "Cost is required.",
+    "number.base": "Money must be a number.",
+    "number.unsafe": "Money is outside of the usable range of numbers.",
+    "any.required": "Money is required.",
   }),
   store: storeSchema,
   inventory: inventorySchema,
