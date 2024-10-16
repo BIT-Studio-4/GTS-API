@@ -52,3 +52,5 @@ const createSaveGame = async (req, res) => {
     });
   }
 };
+
+export { createSaveGame };
