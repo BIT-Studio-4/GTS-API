@@ -148,7 +148,7 @@ const inventorySchema = Joi.object({
   }),
 });
 
-export const createSaveGameSchema = Joi.object({
+export const validateCreateSaveGameSchema = Joi.object({
   id: Joi.string().required().messages({
     "string.base": "Id should be a string.",
     "string.empty": "Id cannot be empty.",
