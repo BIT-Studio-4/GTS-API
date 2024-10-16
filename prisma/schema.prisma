@@ -60,15 +60,16 @@ model Item {
 
 model InventoryItem {
   item_id           Int                   @unique
-  inventory_id      String                @unique
+  inventory_id      String
   quantity          Int
   item              Item                  @relation(fields: [item_id], references: [id], onDelete: Cascade, onUpdate: Cascade)
   inventory         Inventory             @relation(fields: [inventory_id], references: [id], onDelete: Cascade, onUpdate: Cascade)
 }
 
 model StoreObject {
-  item_id           Int                   @unique
-  store_id          String                @unique
+  id                Int                   @id @unique @default(autoincrement())
+  item_id           Int
+  store_id          String
   x_pos             Decimal
   y_pos             Decimal
   z_pos             Decimal
