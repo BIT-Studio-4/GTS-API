@@ -7,7 +7,7 @@ const createSaveGame = async (req, res) => {
     const contentType = req.headers["content-type"];
     if (!contentType || contentType !== "application/json")
       return res.status(400).json({
-        "msg": "Invalid Content-Type. Expected 'application/json'."  
+        "msg": "Invalid Content-Type. Expected 'application/json'."
       });
 
     if (!req.user || req.user.id !== req.body.id)
@@ -24,7 +24,7 @@ const createSaveGame = async (req, res) => {
         "where": { "id": String(req.body.id) },
       });
     }
-    
+
     saveGame = await primsa.saveGame.create({
       "data": {
         "id": req.body.id,
@@ -104,11 +104,11 @@ const createSaveGame = async (req, res) => {
 
 const getSaveGame = async (req, res) => {
   try {
-    if (!req.user || req.user.id !== req.params.id) 
+    if (!req.user || req.user.id !== req.params.id)
       return res.status(401).json({
         "msg": "Not authorized to make this request.",
       });
-    
+
     const saveGame = await primsa.saveGame.findUnique({
       "where": { "id": String(req.params.id) },
       "select": {
@@ -140,11 +140,11 @@ const getSaveGame = async (req, res) => {
       },
     });
 
-    if (!saveGame) 
+    if (!saveGame)
       return res.status(404).json({
         "msg": "Game save not found!",
       });
-      
+
     return res.status(200).json({
       "data": saveGame,
     });
@@ -157,24 +157,24 @@ const getSaveGame = async (req, res) => {
 
 const deleteSaveGame = async (req, res) => {
   try {
-    if (!req.user || req.user.id !== req.params.id) 
+    if (!req.user || req.user.id !== req.params.id)
       return res.status(401).json({
         "msg": "Not authorized to make this request.",
       });
-    
+
     const saveGame = await primsa.saveGame.findUnique({
       "where": { "id": String(req.params.id) },
     });
 
-    if (!saveGame) 
+    if (!saveGame)
       return res.status(404).json({
         "msg": "Game save not found!",
       });
 
     await primsa.saveGame.delete({
       "where": { "id": String(req.params.id) }
-    })
-      
+    });
+
     return res.status(200).json({
       "msg": "Game save successfully deleted!",
     });
