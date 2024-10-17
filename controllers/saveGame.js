@@ -10,7 +10,7 @@ const createSaveGame = async (req, res) => {
         "msg": "Invalid Content-Type. Expected 'application/json'."  
       });
 
-    if (!req.body || req.user.id !== req.body.id)
+    if (!req.user || req.user.id !== req.body.id)
       return res.status(401).json({
         "msg": "Not authorized to make this request.",
       });
