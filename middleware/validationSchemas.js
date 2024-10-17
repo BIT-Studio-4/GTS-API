@@ -5,6 +5,8 @@
 
 import Joi from "joi";
 
+const intLimit = 2147483647;
+
 const nameRegex = /^[A-Za-z0-9_!@#\$%\^&\*\(\)\-\?]+$/;
 
 export const createUserSchema = Joi.object({
@@ -62,7 +64,7 @@ export const createItemSchema = Joi.object({
     "string.empty": "Item type cannot be empty.",
     "any.required": "Item type is required.",
   }),
-  cost: Joi.number().required().messages({
+  cost: Joi.number().integer().min(-intLimit).max(intLimit).options({ convert: false }).required().messages({
     "number.base": "Cost must be a number.",
     "number.unsafe": "Cost is outside of usable range of numbers.",
     "any.required": "Cost is required.",
@@ -84,7 +86,7 @@ export const updateItemSchema = Joi.object({
     "string.empty": "Item type cannot be empty.",
     "any.required": "Item type is required.",
   }),
-  cost: Joi.number().messages({
+  cost: Joi.number().integer().min(-intLimit).max(intLimit).options({ convert: false }).messages({
     "number.base": "Cost must be a number.",
     "number.unsafe": "Cost is outside of usable range of numbers.",
     "any.required": "Cost is required.",
@@ -94,27 +96,27 @@ export const updateItemSchema = Joi.object({
 
 
 const storeObjectSchema = Joi.object({
-  item_id: Joi.number().required().messages({
+  item_id: Joi.number().integer().min(-intLimit).max(intLimit).options({ convert: false }).required().messages({
     "number.base": "Item id must be a number.",
     "number.unsafe": "Item id is outside of the usable range of numbers.",
     "any.required": "Item id is required for each store object.",
   }),
-  x_pos: Joi.number().required().messages({
+  x_pos: Joi.number().options({ convert: false }).required().messages({
     "number.base": "X pos must be a number.",
     "number.unsafe": "X pos is outside of the usable range of numbers.",
     "any.required": "X pos is required for each store object.",
   }),
-  y_pos: Joi.number().required().messages({
+  y_pos: Joi.number().options({ convert: false }).required().messages({
     "number.base": "Y pos must be a number.",
     "number.unsafe": "Y pos is outside of the usable range of numbers.",
     "any.required": "Y pos is required for each store object.",
   }),
-  z_pos: Joi.number().required().messages({
+  z_pos: Joi.number().options({ convert: false }).required().messages({
     "number.base": "Z pos must be a number.",
     "number.unsafe": "Z pos is outside of the usable range of numbers.",
     "any.required": "Z pos is required for each store object.",
   }),
-  y_rot: Joi.number().required().messages({
+  y_rot: Joi.number().options({ convert: false }).required().messages({
     "number.base": "Y rot must be a number.",
     "number.unsafe": "Y rot is outside of the usable range of numbers.",
     "any.required": "Y rot is required for each store object.",
@@ -122,7 +124,7 @@ const storeObjectSchema = Joi.object({
 });
 
 const storeSchema = Joi.object({
-  store_objects: Joi.array().required().items(storeObjectSchema).has(storeObjectSchema).messages({
+  store_objects: Joi.array().required().items(storeObjectSchema).messages({
     "array.base": "Store objects must be an array.",
     "array.excludes": "Store objects must have only valid object information.",
     "array.includes": "Store objects needs all valid object information.",
@@ -131,12 +133,12 @@ const storeSchema = Joi.object({
 });
 
 const inventoryItemSchema = Joi.object({
-  item_id: Joi.number().required().messages({
+  item_id: Joi.number().integer().min(-intLimit).max(intLimit).required().options({ convert: false }).messages({
     "number.base": "Item id must be a number.",
     "number.unsafe": "Item id is outside of the usable range of numbers.",
     "any.required": "Item id is required for each inventory item.",
   }),
-  quantity: Joi.number().required().messages({
+  quantity: Joi.number().integer().min(-intLimit).max(intLimit).options({ convert: false }).required().messages({
     "number.base": "Quantity must be a number.",
     "number.unsafe": "Quantity is outside of the usable range of numbers.",
     "any.required": "Quantity is required for each inventory item.",
@@ -144,7 +146,7 @@ const inventoryItemSchema = Joi.object({
 });
 
 const inventorySchema = Joi.object({
-  items: Joi.array().required().items(inventoryItemSchema).has(inventoryItemSchema).messages({
+  items: Joi.array().required().items(inventoryItemSchema).messages({
     "array.base": "Items must be an array.",
     "array.excludes": "Items must have only valid object information.",
     "array.includes": "Items needs all valid object information.",
@@ -160,11 +162,16 @@ export const createSaveGameSchema = Joi.object({
     "string.empty": "Id cannot be empty.",
     "any.required": "Id is required.",
   }),
-  money: Joi.number().required().messages({
+  money: Joi.number().integer().min(-intLimit).max(intLimit).options({ convert: false }).required().messages({
     "number.base": "Money must be a number.",
+    "number.integer": "Money must be an integer.",
     "number.unsafe": "Money is outside of the usable range of numbers.",
+    "number.max": "Money is larger than usable Integer 32 range.",
+    "number.min": "Money is smaller than usable Integer 32 range.",
     "any.required": "Money is required.",
   }),
   store: storeSchema,
   inventory: inventorySchema,
 });
+
+// set max number to -int32 +int32
