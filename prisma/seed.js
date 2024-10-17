@@ -92,6 +92,8 @@ const main = async () => {
     await seedItems();
   } catch (err) {
     console.error(err);
+    await prisma.$disconnect();
+    process.exit(0);
   } finally {
     // Closes all open connections and stops script safely.
     await prisma.$disconnect();
