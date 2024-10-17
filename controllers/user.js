@@ -1,3 +1,4 @@
+import bcryptjs from "bcryptjs";
 import { PrismaClient } from "@prisma/client";
 
 const prisma = new PrismaClient();
@@ -15,6 +16,10 @@ const createUser = async (req, res) => {
 
     // Check that a user with the same unique info doesn't already exist.
     if (user) return res.status(403).json({ "msg": "User already exists." });
+
+    const salt = await bcryptjs.genSalt();
+    const hashedPassword = await bcryptjs.hash(req.body.password, salt);
+    req.body.password = hashedPassword;
 
     // Create a new user if all checks pass.
     user = await prisma.user.create({
