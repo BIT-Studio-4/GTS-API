@@ -66,6 +66,7 @@ export const createItemSchema = Joi.object({
   }),
   cost: Joi.number().integer().min(-intLimit).max(intLimit).options({ convert: false }).required().messages({
     "number.base": "Cost must be a number.",
+    "number.integer": "Cost must be an integer.",
     "number.unsafe": "Cost is outside of usable range of numbers.",
     "any.required": "Cost is required.",
   }),
@@ -88,6 +89,7 @@ export const updateItemSchema = Joi.object({
   }),
   cost: Joi.number().integer().min(-intLimit).max(intLimit).options({ convert: false }).messages({
     "number.base": "Cost must be a number.",
+    "number.integer": "Cost must be an integer.",
     "number.unsafe": "Cost is outside of usable range of numbers.",
     "any.required": "Cost is required.",
   }),
@@ -98,6 +100,7 @@ export const updateItemSchema = Joi.object({
 const storeObjectSchema = Joi.object({
   item_id: Joi.number().integer().min(-intLimit).max(intLimit).options({ convert: false }).required().messages({
     "number.base": "Item id must be a number.",
+    "number.integer": "Item id must be an integer.",
     "number.unsafe": "Item id is outside of the usable range of numbers.",
     "any.required": "Item id is required for each store object.",
   }),
