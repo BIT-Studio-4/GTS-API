@@ -59,7 +59,8 @@ model Item {
 }
 
 model InventoryItem {
-  item_id           Int                   @unique
+  id                Int                   @id @unique @default(autoincrement())
+  item_id           Int                   
   inventory_id      String
   quantity          Int
   item              Item                  @relation(fields: [item_id], references: [id], onDelete: Cascade, onUpdate: Cascade)
