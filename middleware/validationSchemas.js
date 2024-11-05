@@ -47,7 +47,6 @@ export const updateUserSchema = Joi.object({
 
 
 const itemRegex = /^[A-Za-z0-9_\(\)\s]+$/;
-const itemTypeRegex = /^[A-Z]+$/;
 
 export const createItemSchema = Joi.object({
   name: Joi.string().min(1).max(25).regex(itemRegex).required().messages({
@@ -58,10 +57,10 @@ export const createItemSchema = Joi.object({
     "string.max": "Name should have a maximum length of {#limit}.",
     "any.required": "Name is required.",
   }),
-  item_type: Joi.string().regex(itemTypeRegex).valid("STOCK", "STRUCTURE").required().messages({
+  item_type: Joi.string().valid("STOCK", "STRUCTURE").required().messages({
     "string.base": "Item type should be a string.",
-    "string.pattern.base": "Item type can only consist of captial letters.",
     "string.empty": "Item type cannot be empty.",
+    "any.only": "Item type can only be 'STOCK' or 'STRUCTURE'.",
     "any.required": "Item type is required.",
   }),
   cost: Joi.number().integer().min(1).max(intLimit).options({ convert: false }).required().messages({
@@ -83,10 +82,10 @@ export const updateItemSchema = Joi.object({
     "string.max": "Name should have a maximum length of {#limit}.",
     "any.required": "Name is required.",
   }),
-  item_type: Joi.string().regex(itemTypeRegex).required().messages({
+  item_type: Joi.string().valid("STOCK", "STRUCTURE").required().messages({
     "string.base": "Item type should be a string.",
-    "string.pattern.base": "Item type can only consist of captial letters.",
     "string.empty": "Item type cannot be empty.",
+    "any.only": "Item type can only be 'STOCK' or 'STRUCTURE'.",
     "any.required": "Item type is required.",
   }),
   cost: Joi.number().integer().min(-intLimit).max(intLimit).options({ convert: false }).required().messages({
