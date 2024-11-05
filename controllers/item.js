@@ -1,4 +1,4 @@
-import { PrismaClient } from "@prisma/client";
+import { PrismaClient, Prisma } from "@prisma/client";
 
 const prisma = new PrismaClient();
 
@@ -108,9 +108,17 @@ const updateItem = async (req, res) => {
       "data": item,
     });
   } catch (error) {
-    return res.status(500).json({
-      "msg": error.message,
-    });
+    if (error instanceof Prisma.PrismaClientKnownRequestError) {
+      if (error.code === 'P2002') {
+        return res.status(409).json({
+          message: "Item with the same name already exists.",
+        });
+      }
+    } else {
+      return res.status(500).json({
+        "msg": error.message,
+      });
+    }
   }
 };
 

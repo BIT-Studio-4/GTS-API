@@ -26,6 +26,8 @@ const createUser = async (req, res) => {
       "data": { ...req.body },
     });
 
+    delete user.password;
+
     // Return the newly created user if all processes were successful.
     return res.status(201).json({
       "msg": `User ${req.body.name} successfully created!`,
@@ -43,8 +45,8 @@ const getUsers = async (req, res) => {
     const users = await prisma.user.findMany({
       // Request only the name and money fields when querying the database. Makes sure it won't provide anything confidential or dangerous.
       "select": {
+        "id": true,
         "name": true,
-        "money": true,
       },
     });
 
@@ -67,16 +69,12 @@ const getUser = async (req, res) => {
     const user = await prisma.user.findUnique({
       // Search for a user that matches the id parameter.
       "where": { "id": String(req.params.id) },
-      // Only requests information that isn't confidential or dangerous.
-      "select": {
-        "id": true,
-        "money": true,
-        "name": true,
-      },
     });
 
     // If the user doesn't exist, return a 404 not found response.
     if (!user) return res.status(404).json({ "msg": `User '${req.params.id}' not found.` });
+
+    delete user.password;
 
     // If the request was successful, return the user and a 200 success status.
     return res.status(200).json({

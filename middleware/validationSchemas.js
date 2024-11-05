@@ -46,10 +46,35 @@ export const updateUserSchema = Joi.object({
 
 
 
-const itemRegex = /^[A-Za-z0-9_\(\)]+$/;
+const itemRegex = /^[A-Za-z0-9_\(\)\s]+$/;
 const itemTypeRegex = /^[A-Z]+$/;
 
 export const createItemSchema = Joi.object({
+  name: Joi.string().min(1).max(25).regex(itemRegex).required().messages({
+    "string.base": "Name should be a string.",
+    "string.pattern.base": "Name can only consist of Alphanumeric and '!@#$%^&*()_-?' characters.",
+    "string.empty": "Name cannot be empty.",
+    "string.min": "Name should have a minimum length of {#limit}.",
+    "string.max": "Name should have a maximum length of {#limit}.",
+    "any.required": "Name is required.",
+  }),
+  item_type: Joi.string().regex(itemTypeRegex).valid("STOCK", "STRUCTURE").required().messages({
+    "string.base": "Item type should be a string.",
+    "string.pattern.base": "Item type can only consist of captial letters.",
+    "string.empty": "Item type cannot be empty.",
+    "any.required": "Item type is required.",
+  }),
+  cost: Joi.number().integer().min(1).max(intLimit).options({ convert: false }).required().messages({
+    "number.base": "Cost must be a number.",
+    "number.integer": "Cost must be an integer.",
+    "number.min": "Cost should not be $0 or less.",
+    "number.max": "Cost is larger than usable Integer 32 range.",
+    "number.unsafe": "Cost is outside of usable range of numbers.",
+    "any.required": "Cost is required.",
+  }),
+});
+
+export const updateItemSchema = Joi.object({
   name: Joi.string().min(1).max(25).regex(itemRegex).required().messages({
     "string.base": "Name should be a string.",
     "string.pattern.base": "Name can only consist of Alphanumeric and '!@#$%^&*()_-?' characters.",
@@ -67,33 +92,8 @@ export const createItemSchema = Joi.object({
   cost: Joi.number().integer().min(-intLimit).max(intLimit).options({ convert: false }).required().messages({
     "number.base": "Cost must be a number.",
     "number.integer": "Cost must be an integer.",
-    "number.max": "Cost is larger than usable Integer 32 range.",
     "number.min": "Cost is smaller than usable Integer 32 range.",
-    "number.unsafe": "Cost is outside of usable range of numbers.",
-    "any.required": "Cost is required.",
-  }),
-});
-
-export const updateItemSchema = Joi.object({
-  name: Joi.string().min(1).max(25).regex(itemRegex).messages({
-    "string.base": "Name should be a string.",
-    "string.pattern.base": "Name can only consist of Alphanumeric and '!@#$%^&*()_-?' characters.",
-    "string.empty": "Name cannot be empty.",
-    "string.min": "Name should have a minimum length of {#limit}.",
-    "string.max": "Name should have a maximum length of {#limit}.",
-    "any.required": "Name is required.",
-  }),
-  item_type: Joi.string().regex(itemTypeRegex).messages({
-    "string.base": "Item type should be a string.",
-    "string.pattern.base": "Item type can only consist of captial letters.",
-    "string.empty": "Item type cannot be empty.",
-    "any.required": "Item type is required.",
-  }),
-  cost: Joi.number().integer().min(-intLimit).max(intLimit).options({ convert: false }).messages({
-    "number.base": "Cost must be a number.",
-    "number.integer": "Cost must be an integer.",
     "number.max": "Cost is larger than usable Integer 32 range.",
-    "number.min": "Cost is smaller than usable Integer 32 range.",
     "number.unsafe": "Cost is outside of usable range of numbers.",
     "any.required": "Cost is required.",
   }),
@@ -102,9 +102,11 @@ export const updateItemSchema = Joi.object({
 
 
 const storeObjectSchema = Joi.object({
-  item_id: Joi.number().integer().min(-intLimit).max(intLimit).options({ convert: false }).required().messages({
+  item_id: Joi.number().integer().min(1).max(intLimit).options({ convert: false }).required().messages({
     "number.base": "Item id must be a number.",
     "number.integer": "Item id must be an integer.",
+    "number.min": "Item id is less than the valid range of IDs.",
+    "number.max": "Item id is larger than usable Integer 32 range.",
     "number.unsafe": "Item id is outside of the usable range of numbers.",
     "any.required": "Item id is required for each store object.",
   }),
@@ -140,13 +142,17 @@ const storeSchema = Joi.object({
 });
 
 const inventoryItemSchema = Joi.object({
-  item_id: Joi.number().integer().min(-intLimit).max(intLimit).required().options({ convert: false }).messages({
+  item_id: Joi.number().integer().min(1).max(intLimit).required().options({ convert: false }).messages({
     "number.base": "Item id must be a number.",
+    "number.min": "Item id is less than the valid range of IDs.",
+    "number.max": "Item id is larger than usable Integer 32 range.",
     "number.unsafe": "Item id is outside of the usable range of numbers.",
     "any.required": "Item id is required for each inventory item.",
   }),
-  quantity: Joi.number().integer().min(-intLimit).max(intLimit).options({ convert: false }).required().messages({
+  quantity: Joi.number().integer().min(0).max(intLimit).options({ convert: false }).required().messages({
     "number.base": "Quantity must be a number.",
+    "number.min": "Quantity cannot be less than 0.",
+    "number.max": "Quantity is larger than usable Integer 32 range.",
     "number.unsafe": "Quantity is outside of the usable range of numbers.",
     "any.required": "Quantity is required for each inventory item.",
   }),
@@ -169,16 +175,14 @@ export const createSaveGameSchema = Joi.object({
     "string.empty": "Id cannot be empty.",
     "any.required": "Id is required.",
   }),
-  money: Joi.number().integer().min(-intLimit).max(intLimit).options({ convert: false }).required().messages({
+  money: Joi.number().integer().min(0).max(intLimit).options({ convert: false }).required().messages({
     "number.base": "Money must be a number.",
     "number.integer": "Money must be an integer.",
     "number.unsafe": "Money is outside of the usable range of numbers.",
+    "number.min": "Money should not be less than $0.",
     "number.max": "Money is larger than usable Integer 32 range.",
-    "number.min": "Money is smaller than usable Integer 32 range.",
     "any.required": "Money is required.",
   }),
   store: storeSchema,
   inventory: inventorySchema,
 });
-
-// set max number to -int32 +int32
