@@ -88,10 +88,10 @@ export const updateItemSchema = Joi.object({
     "any.only": "Item type can only be 'STOCK' or 'STRUCTURE'.",
     "any.required": "Item type is required.",
   }),
-  cost: Joi.number().integer().min(-intLimit).max(intLimit).options({ convert: false }).required().messages({
+  cost: Joi.number().integer().min(1).max(intLimit).options({ convert: false }).required().messages({
     "number.base": "Cost must be a number.",
     "number.integer": "Cost must be an integer.",
-    "number.min": "Cost is smaller than usable Integer 32 range.",
+    "number.min": "Cost should not be $0 or less.",
     "number.max": "Cost is larger than usable Integer 32 range.",
     "number.unsafe": "Cost is outside of usable range of numbers.",
     "any.required": "Cost is required.",
