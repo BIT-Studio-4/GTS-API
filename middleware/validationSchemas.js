@@ -28,13 +28,12 @@ export const createUserSchema = Joi.object({
 });
 
 export const updateUserSchema = Joi.object({
-  name: Joi.string().min(1).max(25).regex(nameRegex).required().messages({
+  name: Joi.string().min(1).max(25).regex(nameRegex).messages({
     "string.base": "Name should be a string.",
     "string.pattern.base": "Name can only consist of Alphanumeric and '!@#$%^&*()_-?' characters.",
     "string.empty": "Name cannot be empty.",
     "string.min": "Name should have a minimum length of {#limit}.",
     "string.max": "Name should have a maximum length of {#limit}.",
-    "any.required": "Name is required.",
   }),
   password: Joi.string().min(8).max(128).messages({
     "string.base": "Password should be a string.",
@@ -74,27 +73,24 @@ export const createItemSchema = Joi.object({
 });
 
 export const updateItemSchema = Joi.object({
-  name: Joi.string().min(1).max(25).regex(itemRegex).required().messages({
+  name: Joi.string().min(1).max(25).regex(itemRegex).messages({
     "string.base": "Name should be a string.",
     "string.pattern.base": "Name can only consist of Alphanumeric and '!@#$%^&*()_-?' characters.",
     "string.empty": "Name cannot be empty.",
     "string.min": "Name should have a minimum length of {#limit}.",
     "string.max": "Name should have a maximum length of {#limit}.",
-    "any.required": "Name is required.",
   }),
-  item_type: Joi.string().valid("STOCK", "STRUCTURE").required().messages({
+  item_type: Joi.string().valid("STOCK", "STRUCTURE").messages({
     "string.base": "Item type should be a string.",
     "string.empty": "Item type cannot be empty.",
     "any.only": "Item type can only be 'STOCK' or 'STRUCTURE'.",
-    "any.required": "Item type is required.",
   }),
-  cost: Joi.number().integer().min(1).max(intLimit).options({ convert: false }).required().messages({
+  cost: Joi.number().integer().min(1).max(intLimit).options({ convert: false }).messages({
     "number.base": "Cost must be a number.",
     "number.integer": "Cost must be an integer.",
     "number.min": "Cost should not be $0 or less.",
     "number.max": "Cost is larger than usable Integer 32 range.",
     "number.unsafe": "Cost is outside of usable range of numbers.",
-    "any.required": "Cost is required.",
   }),
 });
 
