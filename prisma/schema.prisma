@@ -24,7 +24,62 @@ model User {
   id                String                @id @unique @default(uuid())
   name              String                @unique
   password          String
-  money             Decimal
+  save_game         SaveGame?
 
   // More fields should be added when required, e.g., 'UserStats' or 'UserPerms'.
+}
+
+model SaveGame {
+  id                String                @id @unique
+  money             Int
+  store             Store?
+  inventory         Inventory?
+  user              User                  @relation(fields: [id], references: [id], onDelete: Cascade, onUpdate: Cascade)
+}
+
+model Store {
+  id                String                @id @unique
+  store_objects     StoreObject[]
+  save_game         SaveGame              @relation(fields: [id], references: [id], onDelete: Cascade, onUpdate: Cascade)
+}
+
+model Inventory {
+  id                String                @id @unique
+  items             InventoryItem[]
+  save_game         SaveGame              @relation(fields: [id], references: [id], onDelete: Cascade, onUpdate: Cascade)
+}
+
+model Item {
+  id                Int                   @id @unique @default(autoincrement())
+  name              String                @unique
+  item_type         ItemType
+  cost              Int
+  inventory_items   InventoryItem[]
+  store_objects     StoreObject[]
+}
+
+model InventoryItem {
+  id                Int                   @id @unique @default(autoincrement())
+  item_id           Int                   
+  inventory_id      String
+  quantity          Int
+  item              Item                  @relation(fields: [item_id], references: [id], onDelete: Cascade, onUpdate: Cascade)
+  inventory         Inventory             @relation(fields: [inventory_id], references: [id], onDelete: Cascade, onUpdate: Cascade)
+}
+
+model StoreObject {
+  id                Int                   @id @unique @default(autoincrement())
+  item_id           Int
+  store_id          String
+  x_pos             Decimal
+  y_pos             Decimal
+  z_pos             Decimal
+  y_rot             Decimal
+  item              Item                  @relation(fields: [item_id], references: [id], onDelete: Cascade, onUpdate: Cascade)
+  store             Store                 @relation(fields: [store_id], references: [id], onDelete: Cascade, onUpdate: Cascade)
+}
+
+enum ItemType {
+  STOCK
+  STRUCTURE
 }

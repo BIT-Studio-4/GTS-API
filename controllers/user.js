@@ -1,3 +1,4 @@
+import bcryptjs from "bcryptjs";
 import { PrismaClient } from "@prisma/client";
 
 const prisma = new PrismaClient();
@@ -16,10 +17,16 @@ const createUser = async (req, res) => {
     // Check that a user with the same unique info doesn't already exist.
     if (user) return res.status(403).json({ "msg": "User already exists." });
 
+    const salt = await bcryptjs.genSalt();
+    const hashedPassword = await bcryptjs.hash(req.body.password, salt);
+    req.body.password = hashedPassword;
+
     // Create a new user if all checks pass.
     user = await prisma.user.create({
       "data": { ...req.body },
     });
+
+    delete user.password;
 
     // Return the newly created user if all processes were successful.
     return res.status(201).json({
@@ -35,16 +42,12 @@ const createUser = async (req, res) => {
 
 const getUsers = async (req, res) => {
   try {
-    const users = await prisma.user.findMany({
-      // Request only the name and money fields when querying the database. Makes sure it won't provide anything confidential or dangerous.
-      "select": {
-        "name": true,
-        "money": true,
-      },
-    });
+    const users = await prisma.user.findMany();
 
     // If the database couldn't find any users, return a 404 not found response.
     if (users.length === 0) return res.status(404).json({ "msg": "No users found." });
+
+    users.forEach(user => delete user.password);
 
     // If the query was successful, return the users with a 200 success response.
     return res.status(200).json({ 
@@ -62,16 +65,12 @@ const getUser = async (req, res) => {
     const user = await prisma.user.findUnique({
       // Search for a user that matches the id parameter.
       "where": { "id": String(req.params.id) },
-      // Only requests information that isn't confidential or dangerous.
-      "select": {
-        "id": true,
-        "money": true,
-        "name": true,
-      },
     });
 
     // If the user doesn't exist, return a 404 not found response.
     if (!user) return res.status(404).json({ "msg": `User '${req.params.id}' not found.` });
+
+    delete user.password;
 
     // If the request was successful, return the user and a 200 success status.
     return res.status(200).json({
